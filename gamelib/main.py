@@ -1,12 +1,13 @@
 import pytality
 import event
 import game
+import state
 
 import logging
 log = logging.getLogger('main')
 
 def main():
-    pytality.term.init(width=120,height=60)
+    pytality.term.init(width=state.width, height=state.height)
     pytality.term.set_title('Dungeon Game    (LD48 #22: Alone)')
     try:
         event.fire('setup')
