@@ -1,0 +1,79 @@
+open as a straight-up roguelike
+    - choose a class! warrior/mage/ranger!
+    - see your stats!
+        - health!
+        - stamina!
+        - (hidden) san
+
+    - descend into the dungeon
+        - stairs don't vanish, but trying to go up them mocks you
+
+    - see a goblin
+        - attack the goblin! (help text guiding you through it)
+        - take some damage
+        - kill it
+            - get it's head as a trophy in your inventory
+        - press K to see your kill tracker!
+            - goblins: 1
+            - orcs, minotaurs, dragons, etc: 0
+
+    
+    - continue on
+        - chamber ending in big doors
+            - they're locked
+
+        - side path
+            - continues on for a while
+            - find some orbs of health and stamina
+            - remark that there doesn't seem to be any more goblins
+            - discover a Key, dead end
+
+        - head back and through the doors
+            - a long hallway
+            - still empty except for some odd junk items
+            - narrator beings to suggest you turn back since there's no goblins
+
+            -if you do:
+                - there WAS a stairway here, right?
+                (-5 san)
+
+            - see sporadic flashes of movement
+                (-1 san) each time
+
+            - based on step count:
+                - there ARE goblins here, right?
+                - where is everybody?
+                etc until the headpoof event, then a respite,
+                then questions about whether it happened at all
+
+                
+
+            - below (-3):
+                - room occasionally cracks
+                (-1 san) each time
+
+            - once at (-6) and at (-16): 
+                - hear a goblin laughing behind you
+                - see nothing
+                - check your inventory, still dead
+                (-3 san)
+
+                - second time, throw the head from your pack and it poofs away
+
+            - below (-16):
+                - doors are sometimes locked behind you
+
+            - below (-25):
+                - items in inventory vanish when you're not looking
+                    - 50% chance of being acknowledged, (-1 san)
+
+                - entries in killtracker disappear every -5, goblin disappears last and it turns into unknown command
+            
+
+
+
+rooms transform based upon san
+
++san:
+    - finding orbs (+1, if below 80?
+    - finding books
