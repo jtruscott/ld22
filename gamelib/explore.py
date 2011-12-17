@@ -4,6 +4,7 @@ import state
 import player
 import room
 import message
+import sanity
 
 class g:
     #items go here
@@ -12,6 +13,8 @@ class g:
 @event.on('explore.start')
 def explore_start():
     state.player = player.Ranger()
+    state.player.x = 40
+    state.player.y = 6
 
     pytality.term.clear()
     x = state.width - 80
@@ -38,11 +41,12 @@ def explore_start():
     for i in range(10):
         message.add("hoo boy!")
 
-    set_room(room.Room(dict(map="tutorial")))
+    set_room(room.Room(room.layout))
 
 def set_room(r):
     g.current_room = r
     g.room_container.children = [g.current_room]
+    g.current_room.activate()
 
 def update_stat_bar():
     g.stat_bar.children[0].format(chr(0xDB) * state.player.hp)
@@ -80,6 +84,8 @@ def explore_run():
     
     #debug keys
     elif k == 's':
-        g.current_room.update_bg()
+        sanity.shudder()
+    elif k == 'b':
+        state.inventory.append("blue key")
     return
 

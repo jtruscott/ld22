@@ -16,6 +16,7 @@ def main():
     except game.GameShutdown:
         pytality.term.reset()
     except KeyboardInterrupt:
+        pytality.term.clear()
         pytality.term.reset()
         raise
     except Exception, e:

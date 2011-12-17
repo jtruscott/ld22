@@ -1,4 +1,5 @@
 import pytality
+
 import logging
 log = logging.getLogger('player')
 
@@ -10,11 +11,15 @@ class Player(object):
         self.hp = self.max_hp
         self.stamina = self.max_stamina
         self.san_loss = 0
+        self.steps = 0
 
     def lose_hp(self, amount, source):
         self.hp -= amount
         if self.hp <= 0:
             self.die(source)
+
+    def lose_san(self, amount):
+        self.san_loss += amount
 
 class Fighter(Player):
     title = "Fighter"

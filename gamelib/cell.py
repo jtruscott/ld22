@@ -15,6 +15,7 @@ class Cell:
     consumable = False
     consumed = False
     special = False
+    door = False
     volatile_bg = False
 
     def __init__(self, x, y, room, char):
@@ -47,12 +48,18 @@ class StaminaPickup(Cell):
     def consume(self):
         message.add("stamina pickup!")
 
-class StartingPosition(Cell):
-    def __init__(self, x, y, room, char):
-        Cell.__init__(self, x, y, room, char)
-        state.player.x = x
-        state.player.y = y
-        self.clear()
+class Item(Cell):
+    consumable = True
+    item_map = {
+        'e': 'eyepatch',
+        'f': 'fish',
+        'h': 'severed hand',
+    }
+
+    def consume(self):
+        item = self.item_map[self.char[2]]
+        state.inventory.append(item)
+        message.add("You found a <WHITE>%s</>." % item)
 
 class Goblin(Cell):
     passable = False
@@ -70,8 +77,10 @@ class Goblin(Cell):
         self.hp -= damage_taken
         if self.hp <= 0:
             message.add("<GREEN>The evil goblin falls!")
-            message.add("You take it's head as a trophy.\n")
-            message.add("<YELLOW>You find a small key.")
+            message.add("You take a <WHITE>goblin head</> as a trophy.\n")
+            state.inventory.append('goblin head')
+            message.add("You find a <WHITE>white key</>.")
+            state.inventory.append('white key')
             state.goblin_alive = False
             state.goblin_head = True
             state.found_small_key = True
@@ -88,20 +97,59 @@ class Impassable(Cell):
     passable = False
 
 class Staircase(Impassable):
-    special = True
+    special = 'staircase'
     def on_use(self):
         if state.player.san_loss < 5:
             message.add("Those are the stairs out. Your quest is not complete.")
         else:
             self.passable = True
             sanity.no_stairs()
+    
+    def clear(self):
+        self.room.set_at(self.x, self.y, fg=colors.BLACK, bg=colors.BLACK, char=' ')
+        self.char[0] = colors.BLACK
+        self.char[1] = colors.BLACK
+        self.char[2] = ' '
+        self.passable = True
+
+color_map = {
+    colors.WHITE: 'white',
+    colors.YELLOW: 'yellow',
+    colors.RED: 'red',
+    colors.BLUE: 'blue',
+    colors.BROWN: 'brown',
+    colors.GREEN: 'green',
+}
+
+class Key(Cell):
+    consumable = True
+    def consume(self):
+        item = '%s key' % color_map[self.char[0]]
+        state.inventory.append(item)
+        message.add("You found a <WHITE>%s</>." % item)
+
+class Door(Impassable):
+    special = True
+    def on_use(self):
+        item = '%s key' % color_map[self.char[0]]
+        if item not in state.inventory:
+            message.add("You need a <WHITE>%s</> to unlock this door" % item)
+        else:
+            message.add("Your <WHITE>%s</> unlocks the door." % item)
+            self.door = True
+            self.passable = True
+            self.clear()
 
 cell_types = {
     (colors.RED, 'o'): HealthPickup,
     (colors.GREEN, 'o'): StaminaPickup,
-    (colors.LIGHTMAGENTA, '@'): StartingPosition,
     (colors.DARKGREY, colors.LIGHTGREY, chr(0xDC)): Staircase,
     (colors.LIGHTGREEN, 'G'): Goblin,
     chr(0xDB): Impassable,
+    chr(0x9C): Key,
+    '/': Door,
+    '=': Door,
     'default': Cell
 }
+
+cell_types.update(dict([(k, Item) for k in Item.item_map.keys()]))

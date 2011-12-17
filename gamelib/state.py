@@ -6,6 +6,6 @@ height = 60
 player = None
 mode = "explore"
 goblin_alive = True
-goblin_head = False
-found_small_key = False
-found_large_key = False
+inventory = ['yellow key', 'brown key', 'green key']
+
+enable_shudder = False
