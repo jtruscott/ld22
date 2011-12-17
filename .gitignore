@@ -1,0 +1,8 @@
+*.pyc
+*.log
+build
+dist
+*.komodoproject
+.coverage
+.coverage.*
+htmlcov
