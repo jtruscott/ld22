@@ -38,6 +38,8 @@ open as a straight-up roguelike
                 (-5 san)
 
             - see sporadic flashes of movement
+                - crackles to an alternate map and back
+                - background color inverts (and maybe goes red later)
                 (-1 san) each time
 
             - based on step count:
@@ -69,7 +71,7 @@ open as a straight-up roguelike
 
                 - entries in killtracker disappear every -5, goblin disappears last and it turns into unknown command
             
-
+            - as you go deeper, alternate-view rooms start to cause stamina or hp loss
 
 
 rooms transform based upon san

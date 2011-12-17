@@ -11,6 +11,8 @@ class g:
 
 @event.on('explore.start')
 def explore_start():
+    state.player = player.Ranger()
+
     pytality.term.clear()
     x = state.width - 80
     g.buffer = pytality.buffer.Buffer(x=x, width=state.width - x, height=0)
@@ -22,8 +24,8 @@ def explore_start():
     )
 
     g.stat_bar = pytality.buffer.Box(
-        width=g.buffer.width, height=7, padding_x=2, padding_y=2,
-        draw_left=False,
+        width=g.buffer.width, height=6, padding_x=2, padding_y=1,
+        draw_left=False, draw_top=False,
         children = [
             pytality.buffer.RichText("<GREEN>Health:</>  %s", y=0),
             pytality.buffer.RichText("<YELLOW>Stamina:</> %s", y=2)
@@ -36,7 +38,7 @@ def explore_start():
     for i in range(10):
         message.add("hoo boy!")
 
-    set_room(room.Room("tutorial"))
+    set_room(room.Room(dict(map="tutorial")))
 
 def set_room(r):
     g.current_room = r
@@ -66,5 +68,18 @@ def explore_run():
         message.scroll(delta=1)
     elif k == 'end':
         message.scroll(end=True)
+
+    elif k == 'up':
+        g.current_room.try_to_move(dy=-1)
+    elif k == 'down':
+        g.current_room.try_to_move(dy=1)
+    elif k == 'left':
+        g.current_room.try_to_move(dx=-1)
+    elif k == 'right':
+        g.current_room.try_to_move(dx=1)
+    
+    #debug keys
+    elif k == 's':
+        g.current_room.update_bg()
     return
 

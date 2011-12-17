@@ -4,28 +4,35 @@ log = logging.getLogger('player')
 
 class Player(object):
     def __init__(self):
-        self.max_hp = 10 + self.strength * 2
-        self.max_stamina = 10 + self.dexterity * 2
-        self.max_sanity = 80 + self.intelligence * 2
+        self.max_hp = self.strength * 2
+        self.max_stamina = self.dexterity * 2
 
         self.hp = self.max_hp
         self.stamina = self.max_stamina
-        self.sanity = self.max_sanity
+        self.san_loss = 0
+
+    def lose_hp(self, amount, source):
+        self.hp -= amount
+        if self.hp <= 0:
+            self.die(source)
 
 class Fighter(Player):
     title = "Fighter"
+    weapon = "sword"
     strength = 18
     dexterity = 14
     intelligence = 12
 
 class Wizard(Player):
     title = "Wizard"
+    weapon = "staff"
     strength = 12
     dexterity = 14
     intelligence = 18
 
 class Ranger(Player):
     title = "Ranger"
+    weapon = "bow"
     strength = 12
     dexterity = 18
     intelligence = 14
