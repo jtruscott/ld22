@@ -6,6 +6,11 @@ height = 60
 player = None
 mode = "explore"
 goblin_alive = True
-inventory = ['yellow key', 'brown key', 'green key']
+inventory = []
 
 enable_shudder = False
+
+
+#Hulk smash debug
+inventory = ['yellow key', 'brown key', 'green key']
+enable_shudder = True

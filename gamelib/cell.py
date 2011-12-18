@@ -53,7 +53,8 @@ class Item(Cell):
     item_map = {
         'e': 'eyepatch',
         'f': 'fish',
-        'h': 'severed hand',
+        'b': 'broom',
+        'g': 'rubber gloves',
     }
 
     def consume(self):
@@ -71,6 +72,9 @@ class Goblin(Cell):
         state.goblin_alive = True
 
     def on_use(self):
+        if not state.goblin_alive:
+            return
+
         damage_taken = random.randint(1, 8) + ((state.player.strength - 10) / 2)
         message.add("Your %s deals <GREEN>%i</> damage to the goblin!" % (state.player.weapon, damage_taken))
 
@@ -112,6 +116,28 @@ class Staircase(Impassable):
         self.char[2] = ' '
         self.passable = True
 
+class Console(Impassable):
+    consoles = {
+        colors.BROWN: """
+<GREEN>></> i'm a brown console
+<GREEN>></> short and stout
+        """,
+        colors.MAGENTA: """
+<GREEN>></> i'm a magenta console
+        """,
+        colors.GREEN: """
+<GREEN>></> i'm a green console
+        """
+    }
+    def on_use(self):
+        if self.consumed:
+            return
+        msg = self.consoles[self.char[0]]
+        message.add("\nA message appears on the video console.")
+        message.add(msg)
+        self.consumed = True
+
+
 color_map = {
     colors.WHITE: 'white',
     colors.YELLOW: 'yellow',
@@ -140,6 +166,17 @@ class Door(Impassable):
             self.passable = True
             self.clear()
 
+class Shudderpoint(Cell):
+    def __init__(self, *args, **kwargs):
+        Cell.__init__(self, *args, **kwargs)
+        self.clear()
+
+    def on_use(self):
+        if self.consumed:
+            return
+        sanity.shudder(nomsg=True)
+        self.consumed = True
+
 cell_types = {
     (colors.RED, 'o'): HealthPickup,
     (colors.GREEN, 'o'): StaminaPickup,
@@ -149,6 +186,8 @@ cell_types = {
     chr(0x9C): Key,
     '/': Door,
     '=': Door,
+    'C': Console,
+    '$': Shudderpoint,
     'default': Cell
 }
 

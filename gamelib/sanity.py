@@ -13,12 +13,15 @@ def no_stairs():
     message.add("stairs?")
 
 def shudder_message():
-    message.add("What was that?")
+    if explore.g.current_room.manual_shudder:
+        explore.g.current_room.on_shudder(explore.g.current_room)
+    else:
+        message.add("What was that?")
 
 
 def step():
     state.player.steps += 1
-    if state.player.steps % 50 == 0:
+    if state.player.steps % 50 == 0 and not explore.g.current_room.manual_shudder:
         shudder()
 
 def bg_color(mode):
@@ -32,7 +35,6 @@ def shudder(nomsg=False):
         log.debug("can't shudder")
         return
         
-    import explore
     room = explore.g.current_room
     if room.shudder_buffer:
         room.mode = 'shudder'
@@ -49,3 +51,4 @@ def shudder(nomsg=False):
             shudder_message()
             state.player.lose_san(1)
 
+import explore

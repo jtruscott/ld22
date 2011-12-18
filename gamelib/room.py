@@ -16,7 +16,9 @@ class Room:
         self.sane_buffer = self.load(self.map)
         self.shudder_buffer = self.load(config.get('shudder_map', None))
         self.mode = 'sane'
+        self.manual_shudder = config.get('manual_shudder', False)
         self.on_activate = config.get('on_activate', None)
+        self.on_shudder = config.get('on_shudder', None)
 
         self.build_cells()
 
@@ -145,13 +147,24 @@ def tutorial_onactivate(self):
         message.add('The stairs out have disappeared!\nYou are trapped!\n')
         state.player.lose_san(5)
 
+def room2_onshudder(self):
+    message.add("You're trapped in a prison cell!")
+    message.add("There's no way out!")
+    state.player.lose_stamina(5)
+    message.add("Your panic tires you.")
 
 layout = dict(
     map='tutorial',
     shudder_map='tutorial_shudder',
     on_activate=tutorial_onactivate,
     next=dict(
-        map='room1'
+        map='room1',
+        next=dict(
+            map='room2',
+            shudder_map='room2_shudder',
+            manual_shudder=True,
+            on_shudder=room2_onshudder,
+        )
     )
 )
 

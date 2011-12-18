@@ -21,6 +21,9 @@ class Player(object):
     def lose_san(self, amount):
         self.san_loss += amount
 
+    def lose_stamina(self, amount):
+        self.stamina -= amount
+
 class Fighter(Player):
     title = "Fighter"
     weapon = "sword"
